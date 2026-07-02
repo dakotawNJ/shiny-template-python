@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Page title -->
+        <title>Shiny for Python Template</title>
+
+        <!-- AdminLTE 4 + Bootstrap 5.3 (CSS) -->
+        <link 
+            rel="stylesheet" 
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" 
+        />
+
+        <link 
+            rel="stylesheet" 
+            href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css" 
+        />
+
+        <link 
+            rel="stylesheet" 
+            href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0/dist/css/adminlte.min.css" 
+        />
+
+        <link 
+            rel="stylesheet" 
+            href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css"
+        />
+
+        <link 
+            rel="stylesheet"
+            href="css/atom-one-light.css"
+        />
+    </head>
+    <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+
+        <div class="app-wrapper">
+
+            <!-- Header -->
+            <nav class="app-header navbar navbar-expand bg-body">
+                <div class="container-fluid">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="bi bi-list"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Sidebar -->
+            <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+                <div class="sidebar-brand">
+                    <a href="#" class="brand-link">
+                        <span class="brand-text fw-light">Shiny for Python Template</span>
+                    </a>
+                </div>
+                <div class="sidebar-wrapper">
+                    <nav class="mt-2">
+                        <ul 
+                            class="nav sidebar-menu flex-column" 
+                            data-lte-toggle="treeview" 
+                            role="menu">
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+
+            <!-- Main content -->
+            <main class="app-main">
+                <div class="app-content-header">
+                    <div id="overview" class="container-fluid">
+                        <h3 class="mb-0">Overview</h3>
+                    </div>
+                </div>
+                <div class="app-content">
+                    <div id="sections" class="vstack gap-3 container-fluid"></div>
+                </div>
+            </main>
+
+        </div>
+
+        <!-- Overview -->
+        <template id="overview-template">
+            <p>
+                This document provides a convention for developing web applications using POSIT's <a href="https://shiny.posit.co/" target="_blank">Shiny</a> framework.
+                It leverages Shiny&#039;s built-in module functionality to organize application files and code to make developing, updating, and collaborating on apps easier than the traditional single-file method.
+                These modules are not to be confused with Python&#039;s native modules, these are designed specifically for the Shiny framework.
+            </p>
+            <p>
+                Each UI layout has top-level navigation tabs (either in a navbar or a sidebar) to allow the user to navigate the various pages within the application.
+                For each navigation tab, there will be a separate Shiny module and each module will have its own separate Python file.
+                Each file will contain only its associated page&#039;s UI and server code.
+                More here: <a href="https://shiny.posit.co/py/docs/modules.html" target="_blank">Shiny Modules</a>
+            </p>
+        </template>
+
+        <!-- Folder Structure -->
+        <template id="folder-template">
+            <h3>Folder Structure</h3>
+            <p>
+                The folder structure starts by creating an <code>app.py</code> file in the root directory.
+                This is the entry point to the app that imports the core UI and server components.
+                You then create an <code>mods/</code> (Python) subdirectory where each module file will be created.
+            </p>
+            <p>
+                Shiny automatically creates an initial folder structure when the <kbd>>shiny create</kbd> command is run.
+                It will create an <code>app.py</code>, a <code>requirements.txt</code>, and a <code>shared.py</code> file in the root directory.
+                More here: <a href="https://shiny.posit.co/py/get-started/create-run.html" target="_blank">Create and Run</a>
+            </p>
+            <p>
+                Global variables shared across the entire application should go in <code>shared.py</code>.
+                However, if data is loaded here or outside of a module or function&#039;s scope, it might slow down your application at startup.
+                It&#039;s better practice to load data within module or function scope. 
+            </p>
+            <p>
+                UI and server code should go in the <code>mods/</code> subdirectory.
+                To be able to import UI objects and server functions, you have to create a blank <code>__init__.py</code> file in it.
+                Once created, you should be able to import them at the top of your <code>app.py</code> file. 
+            </p>
+            <p>
+                Data files should go in a <code>data/</code> subdirectory.
+                Any custom HTML/CSS/JavaScript files should go in the <code>www/</code> subdirectory.
+            </p>
+            <div class="card w-25">
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>project-directory/</li>
+                        <ul style="list-style-type: none;">
+                            <li>app.py</li>
+                            <li>shared.py</li>
+                            <li>requirements.txt</li>
+                            <li>mods/</li>
+
+                            <li>data/</li>
+                            <li>www/</li>
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </template>
+
+        <!-- App Structure -->
+        <template id="app-template">
+            <h3>App Structure</h3>
+            <p>
+                In the app file, you only define top-level pages in the nav object and only top-level modules in the server function.
+            </p>
+            <h5>State Object</h5>
+            <p>
+                The pages in your application will most likely need to access reactive values from other pages and be able to react to those values&#039; changes.
+                For example, a user input page filtering data on a table output in another page.
+                Instead of passing multiple separate reactive values to each page module to achieve this, there will be a single state object that holds each reactive value that will be passed to each page module in the app file.
+            </p>
+            <p>
+                Additionally, each module can have its own internal state object that other pages cannot access.
+                These are initialized at the start of the page&#039;s server function.
+                This is optional, as Shiny&#039;s standard reactive workflow works the same way here. 
+            </p>
+            <p>
+                In Python, state is created by creating a <a href="https://shiny.posit.co/py/docs/comp-r-shiny.html#reactive-values" target="_blank">dictionary of reactive values</a>:
+            </p>
+            <pre class="card w-50">
+                <code class="language-python card-body"></code>
+            </pre>
+            <h5>Custom Functions</h5>
+            <p>
+                Functions you write that don&#039;t depend on or affect the UI or server, such as for data processing, should be separated from the server code entirely.
+                Your app should capture any reactive values within the server code, then pass the non-reactive value to your function.
+                The function should then return another non-reactive value which can then be handled within the server/UI code. 
+            </p>
+            <p>
+                Place such functions in a separate <code>functions.py</code> file.
+                This makes it easier to test them outside of a Shiny session.
+                Try not to write custom functions solely for UI functionality.
+                This creates a dependency within your application that is hard to test and can become quickly outdated.
+                Prefer to repeat UI/server code if necessary. 
+            </p>
+        </template>
+
+        <!-- Code Structure -->
+        <template id="code-template">
+            <h3>Code Conventions</h3>
+            <p>
+                Certain conventions should be followed when implementing this structure so that the app can be easily collaborated on by other developers.
+                For general code formatting, follow the <a href="https://peps.python.org/pep-0008/" target="_blank">Python Enhancement Proposals (PEP 8)</a>.
+                For Shiny specifically, see below:
+            </p>
+            <ul class="list-unstyled card card-body w-50"></ul>
+        </template>
+
+        <!-- Libraries -->
+        <template id="libraries-template">
+            <h3>Libraries</h3>
+            <p>
+                Any 3rd party libraries not included in the lists below should be approved before adding them to a Shiny application.
+                This is to ensure that it is distributed via the proper channels (ex. PyPI) and is well maintained by the developer.
+            </p>
+            <p>
+                Try to minimize the libraries used in each app to the minimum needed to perform its intended purpose.
+                This is to minimize the overhead of maintaining multiple package versions to avoid conflicts.
+                Additionally, it reduces the amount of packages a user has to install or update if the app is shared locally. 
+            </p>
+            <p>See below for commonly used libraries:</p>
+            <strong>Front-End</strong>
+            <ul class="list-unstyled w-25"></ul>
+            <strong>Back-End</strong>
+            <ul class="list-unstyled w-25"></ul>
+        </template>
+
+        <!-- Bootstrap + Popper + AdminLTE (JS) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0/dist/js/adminlte.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+        <script src="js/overview.js"></script>
+        <script src="js/folder.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/code.js"></script>
+        <script src="js/libraries.js"></script>
+
+        <script>hljs.highlightAll();</script>
+
+    </body>
+</html>
