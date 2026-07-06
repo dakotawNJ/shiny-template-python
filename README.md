@@ -8,3 +8,5 @@
 - Create your virtual environment: `py -m venv .venv`
 - Active the environment: `.venv\Scripts\activate.bat`
 - Install **shiny**: `py -m pip install -r requirements.txt`
+
+#### See more in the [docs](https://dakotawnj.github.io/shiny-template-python/)
