@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "overview.html",
+    "href": "overview.html",
+    "title": "Overview",
+    "section": "",
+    "text": "This convention leverages Shiny’s built-in module functionality to organize application files and code to make developing, updating, and collaborating on apps easier than the traditional single-file method. These modules are not to be confused with Python’s native modules, these are designed specifically for the Shiny framework.\nEach UI layout has top-level navigation tabs (either in a navbar or a sidebar) to allow the user to navigate the various pages within the application. For each navigation tab, there will be a separate Shiny module and each module will have its own separate Python file. Each file will contain only its associated page’s UI and server code.\nMore here: Shiny Modules"
+  },
+  {
+    "objectID": "libraries.html",
+    "href": "libraries.html",
+    "title": "Libraries",
+    "section": "",
+    "text": "Any 3rd party libraries not included in the lists below should be approved before adding them to a Shiny application. This is to ensure that it is distributed via the proper channels (e.g. PyPI) and is well maintained by the developer.\nTry to minimize the libraries used in each app to the minimum needed to perform its intended purpose. This is to minimize the overhead of maintaining multiple package versions to avoid conflicts. Additionally, it reduces the amount of packages a user has to install or update if the app is shared locally.\nSee below for commonly used libraries:\n\nFront-End\nshiny\nshinyswatch\nplotly\n\n\n\nBack-End\npandas\npyodbc\ndataretrieval"
+  },
+  {
+    "objectID": "folder.html",
+    "href": "folder.html",
+    "title": "Folder Structure",
+    "section": "",
+    "text": "app.py\nThe folder structure starts by creating an app.py file in the root directory. This is the entry point to the app that imports the core UI and server components. You then create an mods/ (Python) subdirectory where each module file will be created.\nShiny automatically creates an initial folder structure when the &gt;shiny create command is run. It will create an app.py, a requirements.txt, and a shared.py file in the root directory.\n\n\nshared.py\nGlobal variables shared across the entire application should go in shared.py. However, if data is loaded here or outside of a module or function’s scope, it might slow down your application at startup. It’s better practice to load data within module or function scope.\n\n\nmods/\nUI and server code should go in the mods/ subdirectory. To be able to import UI objects and server functions, you have to create a blank __init__.py file in it. Once created, you should be able to import them at the top of your app.py file.\n\n\ndata/\nData files should go in a data/ subdirectory.\n\n\nwww/\nAny custom HTML/CSS/JavaScript files should go in the www/ subdirectory.\n\nTree view\nproject-directory/\n    app.py\n    shared.py\n    requirements.txt\n    mods/\n    data/\n    www/\nMore here: Create and Run"
+  },
+  {
+    "objectID": "code.html",
+    "href": "code.html",
+    "title": "Code Structure",
+    "section": "",
+    "text": "In the app file, you only define top-level pages in the nav object and only top-level modules in the server function.\n\nState Object\nThe pages in your application will most likely need to access reactive values from other pages and be able to react to those values’ changes. For example, a user input page filtering data on a table output in another page. Instead of passing multiple separate reactive values to each page module to achieve this, there will be a single state object that holds each reactive value that will be passed to each page module in the app file.\nAdditionally, each module can have its own internal state object that other pages cannot access. These are initialized at the start of the page’s server function. This is optional, as Shiny’s standard reactive workflow works the same way here.\nIn Python, state is created by creating a dictionary of reactive values:\napp_ui = ui.page_navbar(\n    # Call UI modules in each nav panel\n    ui.nav_panel(\"Page 1\", page1_ui(\"page_1\")),\n    ui.nav_panel(\"Page 2\", page2_ui(\"page_2\")),\n    ui.nav_panel(\"Page 3\", page3_ui(\"page_3\")),\n\n    title=\"Shiny for Python\",\n    id=\"app_id\"\n)\n\ndef server(input, output, session):\n    # Initialize global state object\n    state = {\n        \"reactive_value_1\": reactive.value(),\n        \"reactive_value_2\": reactive.value()\n    }\n\n    # Pass state to each module\n    page1_module(\"page_1\", state)\n    page2_module(\"page_2\", state)\n    page3_module(\"page_3\", state)\n\n\nCustom Functions\nFunctions you write that don’t depend on or affect the UI or server, such as for data processing, should be separated from the server code entirely. Your app should capture any reactive values within the server code, then pass the non-reactive value to your function. The function should then return another non-reactive value which can then be handled within the server/UI code.\nPlace such functions in a separate functions.py file. This makes it easier to test them outside of a Shiny session. Try not to write custom functions solely for UI functionality. This creates a dependency within your application that is hard to test and can become quickly outdated. Prefer to repeat UI/server code if necessary."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Shiny Template for Python",
+    "section": "",
+    "text": "This document provides a convention for developing web applications using POSIT’s Shiny framework."
+  },
+  {
+    "objectID": "naming.html",
+    "href": "naming.html",
+    "title": "Naming Conventions",
+    "section": "",
+    "text": "Certain conventions should be followed when implementing this structure so that the app can be easily collaborated on by other developers.\n\nPython code\nFor general code formatting, follow the Python Enhancement Proposals (PEP 8).\n\n\nShiny code\nFor Shiny specifically, see below:\nTop-level Nav Panels: The name of the page with the ui suffix in snake_case (my_ui)\nTop-level Page Modules: The name of the page with the module suffix in snake_case (my_module)\nGlobal state object: Named state in both the module function call and body\nOptional module state: Named module"
+  }
+]
