@@ -1,0 +1,51 @@
+---
+title: "Code Structure"
+---
+
+In the app file, you only define top-level pages in the nav object and only top-level modules in the server function.
+
+### State Object
+The pages in your application will most likely need to access reactive values from other pages and be able to react to those values' changes.
+For example, a user input page filtering data on a table output in another page.
+Instead of passing multiple separate reactive values to each page module to achieve this, there will be a single state object that holds each reactive value that will be passed to each page module in the app file.
+
+Additionally, each module can have its own internal state object that other pages cannot access.
+These are initialized at the start of the page's server function.
+This is optional, as Shiny's standard reactive workflow works the same way here. 
+
+In Python, state is created by creating a [dictionary of reactive values](https://shiny.posit.co/py/docs/comp-r-shiny.html#reactive-values):
+
+```{.python}
+app_ui = ui.page_navbar(
+    # Call UI modules in each nav panel
+    ui.nav_panel("Page 1", page1_ui("page_1")),
+    ui.nav_panel("Page 2", page2_ui("page_2")),
+    ui.nav_panel("Page 3", page3_ui("page_3")),
+
+    title="Shiny for Python",
+    id="app_id"
+)
+
+def server(input, output, session):
+    # Initialize global state object
+    state = {
+        "reactive_value_1": reactive.value(),
+        "reactive_value_2": reactive.value()
+    }
+
+    # Pass state to each module
+    page1_module("page_1", state)
+    page2_module("page_2", state)
+    page3_module("page_3", state)
+```
+
+### Custom Functions
+Functions you write that don't depend on or affect the UI or server, such as for data processing, should be separated from the server code entirely.
+Your app should capture any reactive values within the server code, then pass the non-reactive value to your function.
+The function should then return another non-reactive value which can then be handled within the server/UI code. 
+
+Place such functions in a separate `functions.py` file.
+This makes it easier to test them outside of a Shiny session.
+Try not to write custom functions solely for UI functionality.
+This creates a dependency within your application that is hard to test and can become quickly outdated.
+Prefer to repeat UI/server code if necessary. 

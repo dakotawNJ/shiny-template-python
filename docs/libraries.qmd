@@ -1,0 +1,22 @@
+---
+title: "Libraries"
+---
+
+Any 3rd party libraries not included in the lists below should be approved before adding them to a Shiny application.
+This is to ensure that it is distributed via the proper channels (e.g. PyPI) and is well maintained by the developer.
+
+Try to minimize the libraries used in each app to the minimum needed to perform its intended purpose.
+This is to minimize the overhead of maintaining multiple package versions to avoid conflicts.
+Additionally, it reduces the amount of packages a user has to install or update if the app is shared locally. 
+
+See below for commonly used libraries:
+
+### Front-End
+[shiny](https://shiny.posit.co/py/)\
+[shinyswatch](https://posit-dev.github.io/py-shinyswatch/)\
+[plotly](https://plotly.com/python/)\
+
+### Back-End
+[pandas](https://pandas.pydata.org/)\
+[pyodbc](https://github.com/mkleehammer/pyodbc)\
+[dataretrieval](https://doi-usgs.github.io/dataretrieval-python/)\

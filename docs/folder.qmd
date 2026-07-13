@@ -1,0 +1,40 @@
+---
+title: "Folder Structure"
+---
+
+### app.py
+The folder structure starts by creating an `app.py` file in the root directory.
+This is the entry point to the app that imports the core UI and server components.
+You then create an `mods/` (Python) subdirectory where each module file will be created.
+
+Shiny automatically creates an initial folder structure when the <kbd>>shiny create</kbd> command is run.
+It will create an `app.py`, a `requirements.txt`, and a `shared.py` file in the root directory.
+
+### shared.py
+Global variables shared across the entire application should go in `shared.py`.
+However, if data is loaded here or outside of a module or function's scope, it might slow down your application at startup.
+It's better practice to load data within module or function scope. 
+
+### mods/
+UI and server code should go in the `mods/` subdirectory.
+To be able to import UI objects and server functions, you have to create a blank `__init__.py` file in it.
+Once created, you should be able to import them at the top of your `app.py` file. 
+
+### data/
+Data files should go in a `data/` subdirectory.
+
+### www/
+Any custom HTML/CSS/JavaScript files should go in the `www/` subdirectory.
+
+#### Tree view
+```
+project-directory/
+    app.py
+    shared.py
+    requirements.txt
+    mods/
+    data/
+    www/
+```
+
+More here: [Create and Run](https://shiny.posit.co/py/get-started/create-run.html)

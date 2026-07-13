@@ -1,0 +1,5 @@
+---
+title: "Shiny Template for Python"
+---
+
+This document provides a convention for developing web applications using POSIT's [Shiny](https://shiny.posit.co/) framework.

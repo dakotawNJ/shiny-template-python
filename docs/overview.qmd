@@ -1,0 +1,12 @@
+---
+title: "Overview"
+---
+
+This convention leverages Shiny's built-in module functionality to organize application files and code to make developing, updating, and collaborating on apps easier than the traditional single-file method.
+These modules are not to be confused with Python's native modules, these are designed specifically for the Shiny framework.
+
+Each UI layout has top-level navigation tabs (either in a navbar or a sidebar) to allow the user to navigate the various pages within the application.
+For each navigation tab, there will be a separate Shiny module and each module will have its own separate Python file.
+Each file will contain only its associated page's UI and server code.
+
+More here: [Shiny Modules](https://shiny.posit.co/py/docs/modules.html)

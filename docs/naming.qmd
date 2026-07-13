@@ -1,0 +1,16 @@
+---
+title: "Naming Conventions"
+---
+
+Certain conventions should be followed when implementing this structure so that the app can be easily collaborated on by other developers.
+
+### Python code
+For general code formatting, follow the [Python Enhancement Proposals (PEP 8)](https://peps.python.org/pep-0008/).
+
+### Shiny code
+For Shiny specifically, see below:
+
+Top-level Nav Panels: The name of the page with the *ui* suffix in snake_case (`my_ui`)\
+Top-level Page Modules: The name of the page with the *module* suffix in snake_case (`my_module`)\
+Global state object: Named `state` in both the module function call and body\
+Optional module state: Named `module`\
